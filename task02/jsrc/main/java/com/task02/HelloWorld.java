@@ -25,30 +25,28 @@ import java.util.Map;
     authType = AuthType.NONE,  
     invokeMode = InvokeMode.BUFFERED  
 )
+
 public class HelloWorld implements RequestHandler<Map<String, Object>, Map<String, Object>> {
 
     @Override
     public Map<String, Object> handleRequest(Map<String, Object> event, Context context) {
-        // Extragerea căii și metodei din eveniment
-        String path = (String) event.getOrDefault("path", "unknown");
-        String method = (String) event.getOrDefault("httpMethod", "unknown");
+        String path = (String) event.get("path");
+        String method = (String) event.get("httpMethod");
 
         Map<String, Object> responseMap = new HashMap<>();
 
         if ("/hello".equals(path) && "GET".equalsIgnoreCase(method)) {
-            // Răspuns 200 pentru calea /hello cu metoda GET
             responseMap.put("statusCode", 200);
             responseMap.put("body", "{\"message\": \"Hello from Lambda\"}");
         } else {
-            // Răspuns 400 pentru orice alte căi sau metode
             responseMap.put("statusCode", 400);
             responseMap.put("body", String.format(
                 "{\"message\": \"Bad request syntax or unsupported method. Request path: %s. HTTP method: %s\"}",
-                path,
-                method
+                path != null ? path : "unknown",
+                method != null ? method : "unknown"
             ));
         }
 
         return responseMap;
-    }
+    }  
 }

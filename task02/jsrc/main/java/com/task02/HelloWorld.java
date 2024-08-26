@@ -30,8 +30,8 @@ public class HelloWorld implements RequestHandler<Map<String, Object>, Map<Strin
     @Override
     public Map<String, Object> handleRequest(Map<String, Object> event, Context context) {
         // Extragerea căii și metodei din eveniment
-        String path = (String) event.get("path");
-        String method = (String) event.get("httpMethod");
+        String path = (String) event.getOrDefault("path", "unknown");
+        String method = (String) event.getOrDefault("httpMethod", "unknown");
 
         Map<String, Object> responseMap = new HashMap<>();
 
@@ -44,11 +44,11 @@ public class HelloWorld implements RequestHandler<Map<String, Object>, Map<Strin
             responseMap.put("statusCode", 400);
             responseMap.put("body", String.format(
                 "{\"message\": \"Bad request syntax or unsupported method. Request path: %s. HTTP method: %s\"}",
-                path != null ? path : "unknown",  // Asigură-te că returnează "unknown" dacă path este null
-                method != null ? method : "unknown"  // Asigură-te că returnează "unknown" dacă method este null
+                path,
+                method
             ));
         }
 
         return responseMap;
-	}
+    }
 }

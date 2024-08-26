@@ -8,6 +8,7 @@ import com.syndicate.deployment.model.RetentionSetting;
 import com.syndicate.deployment.model.lambda.url.AuthType;
 import com.syndicate.deployment.model.lambda.url.InvokeMode;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,24 +29,24 @@ public class HelloWorld implements RequestHandler<Map<String, Object>, Map<Strin
 
     @Override
     public Map<String, Object> handleRequest(Map<String, Object> event, Context context) {
-        // Retrieve the path and method from the event map
+        // Extragerea căii și metodei din eveniment
         String path = (String) event.get("path");
         String method = (String) event.get("httpMethod");
 
         Map<String, Object> responseMap = new HashMap<>();
 
         if ("/hello".equals(path) && "GET".equalsIgnoreCase(method)) {
-            // Return 200 response for /hello path
+            // Răspuns 200 pentru calea /hello cu metoda GET
             responseMap.put("statusCode", 200);
-            responseMap.put("body", "{\"message\": \"Hello from Lambda\"}");  // Return a JSON string
+            responseMap.put("body", "{\"message\": \"Hello from Lambda\"}");
         } else {
-            // Return 400 response for any other paths or methods
+            // Răspuns 400 pentru orice alte căi sau metode
             responseMap.put("statusCode", 400);
             responseMap.put("body", String.format(
                 "{\"message\": \"Bad request syntax or unsupported method. Request path: %s. HTTP method: %s\"}",
-                path != null ? path : "null",
-                method != null ? method : "null"
-            ));  // Return a JSON string
+                path != null ? path : "unknown",  // Asigură-te că returnează "unknown" dacă path este null
+                method != null ? method : "unknown"  // Asigură-te că returnează "unknown" dacă method este null
+            ));
         }
 
         return responseMap;

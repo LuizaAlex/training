@@ -30,27 +30,34 @@ public class HelloWorld implements RequestHandler<Map<String, Object>, Map<Strin
 
     @Override
     public Map<String, Object> handleRequest(Map<String, Object> event, Context context) {
+        // Print the received event for debugging
         System.out.println("Received event: " + event);
-    
+
+        // Extract the path and method based on actual event structure
         String path = (String) event.get("rawPath");
         Map<String, Object> httpContext = (Map<String, Object>) ((Map<String, Object>) event.get("requestContext")).get("http");
         String method = (String) httpContext.get("method");
         
+        // Define response map
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("headers", Map.of("Content-Type", "application/json")); // Set Content-Type header
-    
+        Map<String, Object> bodyMap = new HashMap<>();
+
         if ("/hello".equals(path) && "GET".equalsIgnoreCase(method)) {
+            bodyMap.put("statusCode", 200);
+            bodyMap.put("message", "Hello from Lambda");
             responseMap.put("statusCode", 200);
-            responseMap.put("body", "{\"message\": \"Hello from Lambda\"}");
+            responseMap.put("body", bodyMap);
         } else {
-            responseMap.put("statusCode", 400);
-            responseMap.put("body", String.format(
-                "{\"message\": \"Bad request syntax or unsupported method. Request path: %s. HTTP method: %s\"}",
+            bodyMap.put("statusCode", 400);
+            bodyMap.put("message", String.format(
+                "Bad request syntax or unsupported method. Request path: %s. HTTP method: %s",
                 path != null ? path : "unknown",
                 method != null ? method : "unknown"
             ));
+            responseMap.put("statusCode", 400);
+            responseMap.put("body", bodyMap);
         }
-    
+
         System.out.println("Response map: " + responseMap);
         return responseMap;
     }

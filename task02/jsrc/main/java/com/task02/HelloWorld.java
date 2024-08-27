@@ -40,7 +40,7 @@ public class HelloWorld implements RequestHandler<Map<String, Object>, Map<Strin
         
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("headers", Map.of("Content-Type", "application/json")); // Set Content-Type header
-        
+
         if ("/hello".equals(path) && "GET".equalsIgnoreCase(method)) {
             responseMap.put("statusCode", 200);
             responseMap.put("body", "{\"message\": \"Hello from Lambda\"}");

@@ -32,6 +32,15 @@
     ],
     "resource_type": "iam_role"
   },
+  "hello_world": {
+    "handler": "com.task03.HelloWorld::handleRequest",
+    "runtime": "java11",
+    "memory_size": 512,
+    "timeout": 10,
+    "role_name": "hello_world-role",
+    "resource_type": "lambda",
+    "dependencies": []
+  },
   "task3_api": {
     "resource_type": "api_gateway",
     "deploy_stage": "api",
